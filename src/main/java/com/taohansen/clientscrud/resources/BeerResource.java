@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/beers")
@@ -20,7 +21,13 @@ public class BeerResource {
     private BeerService service;
 
     @GetMapping
-    public ResponseEntity<Page<BeerDTO>> findAll(
+    public ResponseEntity<List<BeerDTO>> findAll(){
+        List<BeerDTO> list = service.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value="/paged")
+    public ResponseEntity<Page<BeerDTO>> findAllPaged(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
             @RequestParam(value = "orderBy", defaultValue = "name") String orderBy,

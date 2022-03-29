@@ -13,13 +13,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BeerService {
 
     @Autowired
     private BeerRepository repository;
+
+    @Transactional(readOnly = true)
+    public List<BeerDTO> findAll() {
+        List<Beer> list = repository.findAll();
+        return list.stream().map(x -> new BeerDTO(x)).collect(Collectors.toList());
+    }
 
     @Transactional(readOnly = true)
     public Page<BeerDTO> findAllPaged(PageRequest pageRequest) {
